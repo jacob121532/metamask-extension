@@ -339,14 +339,28 @@ jobs:
     executor: node-browsers
     steps:
       - run:
-          command: exit 1
-      - run:
-          name: Run on fail status
           command: |
-            echo "I am result of above failed job"
-          when: on_fail
+            set +e
+            echo "hi" || touch failure.txt
       - run:
-          command: echo "last"
+          command: echo "middle"
+      - run:
+          command: |
+            if [ -f failure.txt ]; then
+              exit 1
+            fi
+      - run:
+          command: |
+            set +e
+            ecrho "hi" || touch failure.txt
+      - run:
+          command: |
+            if [ -f failure.txt ]; then
+              echo "second failure"
+              exit 1
+            fi
+      - run:
+          command: echo "end"
 
   trigger-beta-build:
     executor: node-browsers-medium-plus
