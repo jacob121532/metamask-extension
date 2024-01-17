@@ -750,7 +750,7 @@ jobs:
           at: .
       - retry-command/retry-command:
           command_name: Build extension for testing
-          command: MULTICHAIN=1 yarn build:test
+          command: export MULTICHAIN=1; yarn build:test
           no_output_timeout: 5m
           retry-count: 3
           sleep: 5
