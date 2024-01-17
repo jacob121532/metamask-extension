@@ -444,9 +444,12 @@ jobs:
       - run: *shallow-git-clone
       - attach_workspace:
           at: .
-      - run:
-          name: Validate LavaMoat build policy
+      - retry-command/retry-command:
+          command_name: Validate LavaMoat build policy
           command: yarn lavamoat:build:auto
+          no_output_timeout: 5m
+          retry-count: 3
+          sleep: 5
       - run:
           name: Check working tree
           command: .circleci/scripts/check-working-tree.sh
@@ -460,9 +463,12 @@ jobs:
       - run: *shallow-git-clone
       - attach_workspace:
           at: .
-      - run:
-          name: Validate LavaMoat << parameters.build-type >>  policy
+      - retry-command/retry-command:
+          command_name: Validate LavaMoat << parameters.build-type >>  policy
           command: yarn lavamoat:webapp:auto:ci '--build-types=<< parameters.build-type >>'
+          no_output_timeout: 5m
+          retry-count: 3
+          sleep: 5
       - run:
           name: Check working tree
           command: .circleci/scripts/check-working-tree.sh
@@ -748,9 +754,12 @@ jobs:
       - run: *shallow-git-clone
       - attach_workspace:
           at: .
+      - run:
+          name: Move test build to 'dist-test' to avoid conflict with production build
+          command: export MULTICHAIN=1
       - retry-command/retry-command:
           command_name: Build extension for testing
-          command: export MULTICHAIN=1; yarn build:test
+          command: yarn build:test
           no_output_timeout: 5m
           retry-count: 3
           sleep: 5
