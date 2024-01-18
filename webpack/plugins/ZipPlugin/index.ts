@@ -10,8 +10,6 @@ import {
 import { schema } from './schema';
 import { type ZipPluginOptions } from './types';
 
-export { type ZipPluginOptions } from './types';
-
 type Assets = Compilation['assets'];
 
 const { RawSource, ConcatSource } = sources;
